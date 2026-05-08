@@ -91,7 +91,10 @@ function pvt_display_tally( $content ) {
         ));
 
         $tally_html = '<div class="pvt-tally" style="margin-top:20px; padding:10px; border-top:1px solid #eee; font-style:italic;">';
-        $tally_html .= sprintf( 'Unique Visitors: %d', $count );
+        $tally_html .= sprintf( 
+            esc_html__('Unique Visitors: %d .', 'post-visit-tally' ),
+            esc_html__(  $count )
+        );
         $tally_html .= '</div>';
 
         return $content . $tally_html;
