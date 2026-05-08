@@ -1,0 +1,33 @@
+===== Notes on Unique visits =====
+
+```[php]
+// Modified count query for a 24-hour rolling window
+$count = $wpdb->get_var( $wpdb->prepare(
+    "SELECT COUNT(DISTINCT visitor_ip)
+     FROM $table_name
+     WHERE post_id = %d
+     AND visit_time > DATE_SUB(NOW(), INTERVAL 1 DAY)",
+    $post->ID
+));
+```[/php]
+
+Because the database table uses a UNIQUE KEY on the pair of (post_id, visitor_ip), the INSERT IGNORE statement will effectively discard any attempt to record that same IP for that same post a second time, whether it happens five minutes later or five months later.
+How to modify it for a 24-hour window
+
+If you want the "tally" to allow a user to be counted again after 24 hours, you need to change how the database handles duplicates. Instead of blocking the insert, you would allow it, but then filter your count based on a timestamp.
+
+Here is how you would adjust the logic:
+
+1. Change the Database Query
+Instead of INSERT IGNORE (which quits if the IP exists), you would use a standard INSERT. You should also remove the UNIQUE KEY from the table registration function so the database doesn't block the repeat entry.
+
+2. Update the Display Logic
+You would change the SELECT query to only count rows where the visit_time is within the last 24 hours.
+
+== Which approach is better?
+
+    The "Once Ever" approach (Current): Better for measuring the total reach or "lifetime" popularity of a post. It results in a smaller database because the table only grows when new people show up.
+
+    The "24-Hour" approach: Better for measuring "trending" content or current heat. However, the database table will grow much faster since it stores a new row for every person, every day.
+
+    Note: If you stick with the "Once Ever" logic but want to test it yourself, you would need to manually delete your IP row from the wp_post_visit_tally table in your database to see the count increment again.
