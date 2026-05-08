@@ -6,6 +6,7 @@
  * Author: Larry Judd
  * Requires PHP: 7.4
  * Requires CP:  2.4
+ * Tested Up To: 6.8
  * Text Domain:  post-visit-tally
  * Domain Path:  /languages
  * License:      GPLv2 or up
