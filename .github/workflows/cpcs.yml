@@ -11,7 +11,7 @@ jobs:
         FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
         
       steps:
-        - uses: actions/checkout@v4
+        - uses: actions/checkout@v6
 
         - name: CPCS get rules
           run: |
@@ -24,7 +24,9 @@ jobs:
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
-            php-version: '8.2'
+            # PHP 7.4 is the standard baseline for CP compatibility
+            php-version: '7.4'
+            # We must include WPCS because CPCS inherits from it
             tools: phpcs, wp-coding-standards/wpcs
 
         - name: CPCS checks
