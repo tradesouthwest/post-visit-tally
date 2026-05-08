@@ -73,7 +73,7 @@ function pvt_track_visitor() {
 
         // Insert using IGNORE or REPLACE logic to ensure "Unique" visitors
         $wpdb->query( $wpdb->prepare(
-            "INSERT IGNORE INTO `%s` (post_id, visitor_ip) 
+            "INSERT IGNORE INTO %s (post_id, visitor_ip) 
             VALUES (%d, %s)",
             sanitize_text_field($table_name),
             absint($post_id),
