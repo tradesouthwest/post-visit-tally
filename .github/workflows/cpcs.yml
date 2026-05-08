@@ -6,6 +6,10 @@ jobs:
   phpcs:
       name: CPCS
       runs-on: ubuntu-latest
+      # Add this block here to force Node 24 across the whole job
+      env:
+        FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+        
       steps:
         - uses: actions/checkout@v4
 
@@ -17,13 +21,11 @@ jobs:
               ' phpcs.xml
             sed -i '/MY_DOMAIN/ s//post-visit-tally/' phpcs.xml
 
-        # 1. Setup a modern PHP environment (Runs on Node 20+)
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
             php-version: '8.2'
             tools: phpcs
 
-        # 2. Run the check using the ruleset you just downloaded/modified
         - name: CPCS checks
           run: phpcs --standard=phpcs.xml .
