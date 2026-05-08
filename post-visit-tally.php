@@ -14,6 +14,32 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Currently plugin version.
+ * Start at version 1.0.0 and use SemVer - https://semver.org
+ * Rename this for your plugin and update it as you release new versions.
+ */
+//define( 'POST_VISIT_VERSION', '1.0.0' );
+
+//load language scripts     
+function onlist_load_text_domain() 
+{
+    load_plugin_textdomain( 'post-visit-tally', false, 
+                            basename( dirname( __FILE__ ) ) . '/languages' ); 
+}
+
+/**
+ * The code that runs during plugin activation.
+ * This action is documented in includes/class-profile-details-activator.php
+ */ 
+
+function activate_post_visit_tally_tsw() 
+{
+    return false;
+} 
+register_activation_hook(   __FILE__, 'activate_post_visit_tally_tsw' );
+
+
 // 1. Create the database table on activation
 register_activation_hook( __FILE__, 'pvt_create_table' );
 function pvt_create_table() {
