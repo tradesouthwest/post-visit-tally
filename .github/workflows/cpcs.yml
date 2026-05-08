@@ -8,14 +8,22 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4
+
         - name: CPCS get rules
           run: |
             wget https://raw.githubusercontent.com/ClassicPress/ClassicPress-Coding-Standards/main/phpcs.xml
-            sed -i '/^\t<!-- start config -->.*/a\
+            sed -i '/^\t.*/a\
               <file>.</file>
               ' phpcs.xml
             sed -i '/MY_DOMAIN/ s//post-visit-tally/' phpcs.xml
-        - name: CPCS checks
-          uses: 10up/wpcs-action@stable
+
+        # 1. Setup a modern PHP environment (Runs on Node 20+)
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
           with:
-            use_local_config: true
+            php-version: '8.2'
+            tools: phpcs
+
+        # 2. Run the check using the ruleset you just downloaded/modified
+        - name: CPCS checks
+          run: phpcs --standard=phpcs.xml .
