@@ -68,12 +68,14 @@ function pvt_track_visitor() {
     if ( is_single() ) {
         global $wpdb, $post;
         $table_name = $wpdb->prefix . 'post_visit_tally';
-        $ip = $_SERVER['REMOTE_ADDR'];
+        $ip = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '' ) );
         $post_id = $post->ID;
 
         // Insert using IGNORE or REPLACE logic to ensure "Unique" visitors
         $wpdb->query( $wpdb->prepare(
-            "INSERT IGNORE INTO $table_name (post_id, visitor_ip) VALUES (%d, %s)",
+            "INSERT IGNORE INTO %s (post_id, visitor_ip) 
+            VALUES (%d, %s)",
+            $table_name,
             $post_id,
             $ip
         ));
