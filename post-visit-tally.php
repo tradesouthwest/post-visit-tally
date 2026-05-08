@@ -3,7 +3,7 @@
  * Plugin Name: Post Visit Tally
  * Description: Counts unique visitors per post and displays the total on single post pages.
  * Version:      1.0
- * Author: Larry Judd
+ * Author: Larry Judd qkobcfli_wp207
  * Requires PHP: 7.4
  * Requires CP:  2.4
  * Tested Up To: 6.8
@@ -68,13 +68,13 @@ function pvt_track_visitor() {
     if ( is_single() ) {
         global $wpdb, $post;
         // You cannot perform math, call functions (like count()), or use constants directly inside a string.
-        // $table_name = $wpdb->prefix . 'post_visit_tally'; 
+        $table_name = $wpdb->prefix . 'post_visit_tally'; 
         $ip = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '' ) );
         $post_id = $post->ID;
 
         // Insert using IGNORE or REPLACE logic to ensure "Unique" visitors
         $wpdb->query( $wpdb->prepare(
-            "INSERT IGNORE INTO $wpdb->prefix . 'post_visit_tally' (post_id, visitor_ip) 
+            "INSERT IGNORE INTO $table_name (post_id, visitor_ip) 
             VALUES (%d, %s)",
             absint($post_id),
             sanitize_text_field($ip)
@@ -87,10 +87,11 @@ add_filter( 'the_content', 'pvt_display_tally' );
 function pvt_display_tally( $content ) {
     if ( is_single() && in_the_loop() && is_main_query() ) {
         global $wpdb, $post;
-        //$table_name = $wpdb->prefix . 'post_visit_tally';
+        $table_name = $wpdb->prefix . 'post_visit_tally';
         
         $count = $wpdb->get_var( $wpdb->prepare(
-            "SELECT COUNT(*) FROM $wpdb->prefix . 'post_visit_tally' WHERE post_id = %d",
+            "SELECT COUNT(*) FROM `$table_name` 
+            WHERE post_id = %d",
             $post_id = $post->ID
         ));
 
