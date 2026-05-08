@@ -1,4 +1,4 @@
-![Post Visit Plugin banner](images/banner-1544x500-post-visit.png)
+![Post Visit Plugin banner](images/banner-1544x500-post-visit-tally.png)
 
 # Post Visit Tally
 Dispaly unique visitor count to the bottom of single posts' pages.
