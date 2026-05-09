@@ -74,7 +74,7 @@ function pvt_track_visitor() {
 
         // Insert using IGNORE or REPLACE logic to ensure "Unique" visitors
         $wpdb->query( $wpdb->prepare(
-            "INSERT IGNORE INTO $table_name (post_id, visitor_ip)   /* phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared */
+            "INSERT IGNORE INTO $table_name (post_id, visitor_ip) 
             VALUES (%d, %s)",
             absint($post_id),
             sanitize_text_field($ip)
@@ -90,7 +90,7 @@ function pvt_display_tally( $content ) {
         $table_name = $wpdb->prefix . 'post_visit_tally';
         
         $count = $wpdb->get_var( $wpdb->prepare(
-            "SELECT COUNT(*) FROM `$table_name`     /* phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared */
+            "SELECT COUNT(*) FROM `$table_name` 
             WHERE post_id = %d",
             $post_id = $post->ID
         ));
